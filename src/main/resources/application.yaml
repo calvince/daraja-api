@@ -1,0 +1,8 @@
+server:
+  port: 9090
+mpesa:
+  daraja:
+    consumer-key: ${env.CONSUMER_KEY}
+    consumer-secret: ${env.CONSUMER_SECRET}
+    grant-type: client_credentials
+    oauth-endpoint: https://sandbox.safaricom.co.ke/oauth/v1/generate
