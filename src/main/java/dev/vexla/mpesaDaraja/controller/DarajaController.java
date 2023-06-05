@@ -1,5 +1,6 @@
 package dev.vexla.mpesaDaraja.controller;
 
+import dev.vexla.mpesaDaraja.dto.AccessToken;
 import dev.vexla.mpesaDaraja.service.DarajaApi;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,5 +17,8 @@ public class DarajaController {
         this.darajaApi = darajaApi;
     }
 
-
+    @GetMapping(path = "/token", produces = "application/json")
+    public ResponseEntity<AccessToken> getAccessToken() {
+        return ResponseEntity.ok(this.darajaApi.getAccessToken());
+    }
 }
