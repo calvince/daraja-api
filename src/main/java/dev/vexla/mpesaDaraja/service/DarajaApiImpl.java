@@ -2,8 +2,9 @@ package dev.vexla.mpesaDaraja.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.vexla.mpesaDaraja.config.DarajaConfiguration;
-import dev.vexla.mpesaDaraja.dto.AccessToken;
-import dev.vexla.mpesaDaraja.shared.Constants;
+import dev.vexla.mpesaDaraja.dto.request.RegisterUrlRequest;
+import dev.vexla.mpesaDaraja.dto.response.AccessToken;
+import dev.vexla.mpesaDaraja.dto.response.RegisterUrlResponse;
 import dev.vexla.mpesaDaraja.shared.Helper;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -51,5 +52,18 @@ public class DarajaApiImpl implements DarajaApi {
             log.error(String.format("Could not get access token. -> %s", e.getLocalizedMessage()));
             return null;
         }
+    }
+
+    @Override
+    public RegisterUrlResponse registerUrl() {
+    AccessToken accessToken = getAccessToken();
+
+        RegisterUrlRequest registerUrlRequest = new RegisterUrlRequest();
+        registerUrlRequest.setShortCode(darajaConfiguration.getShortCode());
+        registerUrlRequest.setConfirmationURL(darajaConfiguration.getConfirmationUrl());
+        registerUrlRequest.setValidationURL(darajaConfiguration.getValidationUrl());
+        registerUrlRequest.setResponseType(darajaConfiguration.getResponseType());
+
+        return null;
     }
 }
