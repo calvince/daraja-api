@@ -14,6 +14,10 @@ public class DarajaConfiguration {
     private String consumerSecret;
     private String grantType;
     private String oauthEndpoint;
+    private String shortCode;
+    private String responseType;
+    private String confirmationUrl;
+    private String validationUrl;
 
     @Override
     public String toString() {
