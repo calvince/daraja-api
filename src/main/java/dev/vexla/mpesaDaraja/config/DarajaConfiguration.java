@@ -14,6 +14,8 @@ public class DarajaConfiguration {
     private String consumerSecret;
     private String grantType;
     private String oauthEndpoint;
+    private String registerUrlEndpoint;
+    private String simulateTransactionEndpoint;
     private String shortCode;
     private String responseType;
     private String confirmationUrl;
