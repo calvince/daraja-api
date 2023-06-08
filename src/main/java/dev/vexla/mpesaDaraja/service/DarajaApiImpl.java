@@ -7,12 +7,11 @@ import dev.vexla.mpesaDaraja.dto.response.AccessToken;
 import dev.vexla.mpesaDaraja.dto.response.RegisterUrlResponse;
 import dev.vexla.mpesaDaraja.shared.Helper;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static dev.vexla.mpesaDaraja.shared.Constants.*;
 
@@ -64,6 +63,23 @@ public class DarajaApiImpl implements DarajaApi {
         registerUrlRequest.setValidationURL(darajaConfiguration.getValidationUrl());
         registerUrlRequest.setResponseType(darajaConfiguration.getResponseType());
 
-        return null;
+        RequestBody body = RequestBody.create( Objects.requireNonNull(Helper.toJson(registerUrlRequest)), JSON_MEDIA_TYPE);
+
+        Request request = new Request.Builder()
+                .url(darajaConfiguration.getRegisterUrlEndpoint())
+                .post(body)
+                .addHeader("Authorization", String.format("%s %s", BASIC_AUTH_STRING, accessToken.getAccessToken()))
+                .build();
+
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+
+            assert response.body() != null;
+            //use Jackson to Decode the ResponseBody ................
+            return objectMapper.readValue(response.body().string(), RegisterUrlResponse.class);
+        } catch (IOException e) {
+            log.error(String.format("Could not register url -> %s", e.getLocalizedMessage()));
+            return null;
+        }
     }
 }
