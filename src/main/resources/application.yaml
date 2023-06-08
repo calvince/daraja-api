@@ -6,3 +6,9 @@ mpesa:
     consumer-secret: ${env.CONSUMER_SECRET}
     grant-type: client_credentials
     oauth-endpoint: https://sandbox.safaricom.co.ke/oauth/v1/generate
+    register-url-endpoint: https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl
+    simulate-transaction-endpoint: https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate
+    shortCode: 601426
+    responseType: Completed
+    confirmation-url: https://a808-105-160-30-140.ngrok-free/mobile-money/confirmation
+    validation-url: https://a808-105-160-30-140.ngrok-free/mobile-money/validation
