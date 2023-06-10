@@ -63,12 +63,12 @@ public class DarajaApiImpl implements DarajaApi {
         registerUrlRequest.setValidationURL(darajaConfiguration.getValidationUrl());
         registerUrlRequest.setResponseType(darajaConfiguration.getResponseType());
 
-        RequestBody body = RequestBody.create( Objects.requireNonNull(Helper.toJson(registerUrlRequest)), JSON_MEDIA_TYPE);
+        RequestBody body = RequestBody.Companion.create( Objects.requireNonNull(Helper.toJson(registerUrlRequest)), JSON_MEDIA_TYPE);
 
         Request request = new Request.Builder()
                 .url(darajaConfiguration.getRegisterUrlEndpoint())
                 .post(body)
-                .addHeader("Authorization", String.format("%s %s", BASIC_AUTH_STRING, accessToken.getAccessToken()))
+                .addHeader("Authorization", String.format("Bearer %s", accessToken.getAccessToken()))
                 .build();
 
         try {
