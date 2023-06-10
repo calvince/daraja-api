@@ -10,5 +10,5 @@ mpesa:
     simulate-transaction-endpoint: https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate
     shortCode: 601426
     responseType: Completed
-    confirmation-url: https://a808-105-160-30-140.ngrok-free/mobile-money/confirmation
-    validation-url: https://a808-105-160-30-140.ngrok-free/mobile-money/validation
+    confirmation-url: https://274e-196-111-83-125.ngrok-free.app/mobile-money/confirmation
+    validation-url: https://274e-196-111-83-125.ngrok-free.app/mobile-money/validation
