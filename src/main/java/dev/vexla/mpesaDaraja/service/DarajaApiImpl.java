@@ -70,7 +70,7 @@ public class DarajaApiImpl implements DarajaApi {
         Request request = new Request.Builder()
                 .url(darajaConfiguration.getRegisterUrlEndpoint())
                 .post(body)
-                .addHeader("Authorization", String.format("Bearer %s", accessToken.getAccessToken()))
+                .addHeader(AUTHORIZATION_HEADER_STRING,  String.format("%s %s", BEARER_AUTH_STRING, accessToken.getAccessToken()))
                 .build();
 
         try {
@@ -88,5 +88,16 @@ public class DarajaApiImpl implements DarajaApi {
     @Override
     public SimulateC2BResponse simulateC2BTransaction(SimulateC2BRequest simulateC2BRequest) {
         //get access token
+        AccessToken accessToken = getAccessToken();
+
+        RequestBody body = RequestBody.Companion.create( Objects.requireNonNull(Helper.toJson(simulateC2BRequest)), JSON_MEDIA_TYPE);
+
+        //request body
+        Request request = new Request.Builder()
+                .url(darajaConfiguration.getSimulateTransactionEndpoint())
+                .post(body)
+                .addHeader(AUTHORIZATION_HEADER_STRING, String.format("%s %s", BEARER_AUTH_STRING, accessToken.getAccessToken()))
+                .build();
+
     }
 }
