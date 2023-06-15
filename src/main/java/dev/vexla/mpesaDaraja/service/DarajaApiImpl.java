@@ -2,6 +2,8 @@ package dev.vexla.mpesaDaraja.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.vexla.mpesaDaraja.config.DarajaConfiguration;
+import dev.vexla.mpesaDaraja.dto.SimulateC2BRequest;
+import dev.vexla.mpesaDaraja.dto.SimulateC2BResponse;
 import dev.vexla.mpesaDaraja.dto.request.RegisterUrlRequest;
 import dev.vexla.mpesaDaraja.dto.response.AccessToken;
 import dev.vexla.mpesaDaraja.dto.response.RegisterUrlResponse;
@@ -81,5 +83,10 @@ public class DarajaApiImpl implements DarajaApi {
             log.error(String.format("Could not register url -> %s", e.getLocalizedMessage()));
             return null;
         }
+    }
+
+    @Override
+    public SimulateC2BResponse simulateC2BTransaction(SimulateC2BRequest simulateC2BRequest) {
+        //get access token
     }
 }
