@@ -57,7 +57,7 @@ public class DarajaApiImpl implements DarajaApi {
 
     @Override
     public RegisterUrlResponse registerUrl() {
-    AccessToken accessToken = getAccessToken();
+        AccessToken accessToken = getAccessToken();
 
         RegisterUrlRequest registerUrlRequest = new RegisterUrlRequest();
         registerUrlRequest.setShortCode(darajaConfiguration.getShortCode());
@@ -99,5 +99,14 @@ public class DarajaApiImpl implements DarajaApi {
                 .addHeader(AUTHORIZATION_HEADER_STRING, String.format("%s %s", BEARER_AUTH_STRING, accessToken.getAccessToken()))
                 .build();
 
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+            assert response.body()!= null;
+            //use Jackson to Decode the ResponseBody
+            return objectMapper.readValue(response.body().string(), SimulateC2BResponse.class);
+        } catch (IOException e) {
+            log.error(String.format("Could not simulate c2b transaction -> %s", e.getLocalizedMessage()));
+            return null;
+        }
     }
 }
