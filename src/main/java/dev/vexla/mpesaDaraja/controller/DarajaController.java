@@ -1,5 +1,7 @@
 package dev.vexla.mpesaDaraja.controller;
 
+import dev.vexla.mpesaDaraja.dto.SimulateC2BRequest;
+import dev.vexla.mpesaDaraja.dto.SimulateC2BResponse;
 import dev.vexla.mpesaDaraja.dto.request.TransactionResult;
 import dev.vexla.mpesaDaraja.dto.response.AccessToken;
 import dev.vexla.mpesaDaraja.dto.response.AcknowledgeResponse;
@@ -35,5 +37,11 @@ public class DarajaController {
     @PostMapping(path = "/validation", produces = "application/json")
     public ResponseEntity<AcknowledgeResponse> validateTransaction(@RequestBody TransactionResult result) {
         return ResponseEntity.ok(acknowledgeResponse);
+    }
+
+    //simulate c2b transaction
+    @PostMapping(path = "/simulate-c2b", produces = "application/json")
+    public ResponseEntity<SimulateC2BResponse> simulateC2BTransaction(@RequestBody SimulateC2BRequest simulateC2BRequest) {
+        return  ResponseEntity.ok(this.darajaApi.simulateC2BTransaction(simulateC2BRequest));
     }
 }
