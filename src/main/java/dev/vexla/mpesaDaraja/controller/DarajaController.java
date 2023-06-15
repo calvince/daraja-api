@@ -1,22 +1,23 @@
 package dev.vexla.mpesaDaraja.controller;
 
+import dev.vexla.mpesaDaraja.dto.request.TransactionResult;
 import dev.vexla.mpesaDaraja.dto.response.AccessToken;
+import dev.vexla.mpesaDaraja.dto.response.AcknowledgeResponse;
 import dev.vexla.mpesaDaraja.dto.response.RegisterUrlResponse;
 import dev.vexla.mpesaDaraja.service.DarajaApi;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/mobile-money")
 public class DarajaController {
 
     private final DarajaApi darajaApi;
+    private final AcknowledgeResponse acknowledgeResponse;
 
-    public DarajaController(DarajaApi darajaApi) {
+    public DarajaController(DarajaApi darajaApi, AcknowledgeResponse acknowledgeResponse) {
         this.darajaApi = darajaApi;
+        this.acknowledgeResponse = acknowledgeResponse;
     }
 
     @GetMapping(path = "/token", produces = "application/json")
@@ -28,5 +29,11 @@ public class DarajaController {
     @PostMapping(path = "/register-url", produces = "application/json")
     public ResponseEntity<RegisterUrlResponse> registerUrl() {
         return ResponseEntity.ok(this.darajaApi.registerUrl());
+    }
+
+    //validate transaction
+    @PostMapping(path = "/validation", produces = "application/json")
+    public ResponseEntity<AcknowledgeResponse> validateTransaction(@RequestBody TransactionResult result) {
+        return ResponseEntity.ok(acknowledgeResponse);
     }
 }
