@@ -20,6 +20,11 @@ public class DarajaConfiguration {
     private String responseType;
     private String confirmationUrl;
     private String validationUrl;
+    private String b2cTransactionEndpoint;
+    private String b2cResultUrl;
+    private String b2cQueueTimeoutUrl;
+    private String b2cInitiatorName;
+    private String b2cInitiatorPassword;
 
     @Override
     public String toString() {
