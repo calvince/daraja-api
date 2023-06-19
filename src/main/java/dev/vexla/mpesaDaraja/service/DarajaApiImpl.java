@@ -2,8 +2,10 @@ package dev.vexla.mpesaDaraja.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.vexla.mpesaDaraja.config.DarajaConfiguration;
-import dev.vexla.mpesaDaraja.dto.SimulateC2BRequest;
-import dev.vexla.mpesaDaraja.dto.SimulateC2BResponse;
+import dev.vexla.mpesaDaraja.dto.request.InternalB2CTransactionRequest;
+import dev.vexla.mpesaDaraja.dto.request.SimulateC2BRequest;
+import dev.vexla.mpesaDaraja.dto.response.B2CTransactionSyncResponse;
+import dev.vexla.mpesaDaraja.dto.response.SimulateC2BResponse;
 import dev.vexla.mpesaDaraja.dto.request.RegisterUrlRequest;
 import dev.vexla.mpesaDaraja.dto.response.AccessToken;
 import dev.vexla.mpesaDaraja.dto.response.RegisterUrlResponse;
@@ -108,5 +110,11 @@ public class DarajaApiImpl implements DarajaApi {
             log.error(String.format("Could not simulate c2b transaction -> %s", e.getLocalizedMessage()));
             return null;
         }
+    }
+
+    @Override
+    public B2CTransactionSyncResponse performB2CTransaction(InternalB2CTransactionRequest b2CTransactionRequest) {
+
+        return null;
     }
 }
