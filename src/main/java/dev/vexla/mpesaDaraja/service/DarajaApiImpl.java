@@ -2,6 +2,7 @@ package dev.vexla.mpesaDaraja.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.vexla.mpesaDaraja.config.DarajaConfiguration;
+import dev.vexla.mpesaDaraja.dto.request.B2CTransactionRequest;
 import dev.vexla.mpesaDaraja.dto.request.InternalB2CTransactionRequest;
 import dev.vexla.mpesaDaraja.dto.request.SimulateC2BRequest;
 import dev.vexla.mpesaDaraja.dto.response.B2CTransactionSyncResponse;
@@ -115,6 +116,12 @@ public class DarajaApiImpl implements DarajaApi {
     @Override
     public B2CTransactionSyncResponse performB2CTransaction(InternalB2CTransactionRequest b2CTransactionRequest) {
 
+        B2CTransactionRequest b2CTransactionRequest1 = new B2CTransactionRequest();
+        b2CTransactionRequest1.setAmount(b2CTransactionRequest.getAmount());
+        b2CTransactionRequest1.setRemarks(b2CTransactionRequest.getRemarks());
+        b2CTransactionRequest1.setOccassion(b2CTransactionRequest.getOccassion());
+        b2CTransactionRequest1.setCommandID(b2CTransactionRequest.getCommandID());
+        b2CTransactionRequest1.setPartyB(b2CTransactionRequest.getPartyB());
         return null;
     }
 }
