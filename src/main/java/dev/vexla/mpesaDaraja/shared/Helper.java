@@ -13,7 +13,10 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PublicKey;
 import java.security.Security;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.Base64;
 
 
@@ -33,7 +36,7 @@ public class Helper {
             return null;
         }
     }
-
+        //encrypt password using cipher and certificate
     public static String getSecurityCredential(String b2cInitiatorPassword) {
         try {
             Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
@@ -43,7 +46,13 @@ public class Helper {
 
             FileInputStream fileInputStream = new FileInputStream(resource.getFile());
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCPadding", "BC");
-            
+            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+            X509Certificate certificate = (X509Certificate) certificateFactory.generateCertificate(fileInputStream);
+            PublicKey key = certificate.getPublicKey();
+            cipher.init(Cipher.ENCRYPT_MODE,key);
+
+            byte[] cipherText = cipher.doFinal(input);
+
 
 
         }
