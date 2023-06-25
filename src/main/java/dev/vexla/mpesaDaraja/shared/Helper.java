@@ -39,7 +39,8 @@ public class Helper {
             Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
             byte[] input = b2cInitiatorPassword.getBytes();
             Resource resource = new ClassPathResource("cert.cer");
-            InputStream inputStream = new FileInputStream(resource.getFile());
+            InputStream inputStream = resource.getInputStream();
+
 
         }
         return null;
