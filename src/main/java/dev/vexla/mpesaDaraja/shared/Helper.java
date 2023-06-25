@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
+import java.security.Security;
 import java.util.Base64;
 
 
@@ -23,5 +24,14 @@ public class Helper {
         } catch (JsonProcessingException e) {
             return null;
         }
+    }
+
+    public static String getSecurityCredential(String b2cInitiatorPassword) {
+        try {
+            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+            byte[] input = b2cInitiatorPassword.getBytes();
+
+        }
+        return null;
     }
 }
