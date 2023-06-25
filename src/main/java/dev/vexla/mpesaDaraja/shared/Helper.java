@@ -41,6 +41,10 @@ public class Helper {
             Resource resource = new ClassPathResource("cert.cer");
             InputStream inputStream = resource.getInputStream();
 
+            FileInputStream fileInputStream = new FileInputStream(resource.getFile());
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCPadding", "BC");
+            
+
 
         }
         return null;
