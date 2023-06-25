@@ -2,6 +2,7 @@ package dev.vexla.mpesaDaraja.shared;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -40,8 +41,8 @@ public class Helper {
     }
 
     //encrypt password using cipher and certificate
-    public static String getSecurityCredential(String b2cInitiatorPassword) throws IOException, IllegalBlockSizeException, NoSuchPaddingException, CertificateException
-            , NoSuchAlgorithmException, BadPaddingException, NoSuchProviderException, InvalidKeyException {
+    @SneakyThrows
+    public static String getSecurityCredential(String b2cInitiatorPassword) {
         String encryptedPassword;
         try {
             Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
