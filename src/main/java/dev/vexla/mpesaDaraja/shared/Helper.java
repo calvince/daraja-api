@@ -3,8 +3,16 @@ package dev.vexla.mpesaDaraja.shared;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.Security;
 import java.util.Base64;
 
@@ -30,6 +38,8 @@ public class Helper {
         try {
             Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
             byte[] input = b2cInitiatorPassword.getBytes();
+            Resource resource = new ClassPathResource("cert.cer");
+            InputStream inputStream = new FileInputStream(resource.getFile());
 
         }
         return null;
