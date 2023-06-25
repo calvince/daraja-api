@@ -1,5 +1,7 @@
 package dev.vexla.mpesaDaraja.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.vexla.mpesaDaraja.config.DarajaConfiguration;
 import dev.vexla.mpesaDaraja.dto.request.B2CTransactionRequest;
@@ -10,6 +12,7 @@ import dev.vexla.mpesaDaraja.dto.response.SimulateC2BResponse;
 import dev.vexla.mpesaDaraja.dto.request.RegisterUrlRequest;
 import dev.vexla.mpesaDaraja.dto.response.AccessToken;
 import dev.vexla.mpesaDaraja.dto.response.RegisterUrlResponse;
+import dev.vexla.mpesaDaraja.shared.Constants;
 import dev.vexla.mpesaDaraja.shared.Helper;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -68,12 +71,12 @@ public class DarajaApiImpl implements DarajaApi {
         registerUrlRequest.setValidationURL(darajaConfiguration.getValidationUrl());
         registerUrlRequest.setResponseType(darajaConfiguration.getResponseType());
 
-        RequestBody body = RequestBody.Companion.create( Objects.requireNonNull(Helper.toJson(registerUrlRequest)), JSON_MEDIA_TYPE);
+        RequestBody body = RequestBody.Companion.create(Objects.requireNonNull(Helper.toJson(registerUrlRequest)), JSON_MEDIA_TYPE);
 
         Request request = new Request.Builder()
                 .url(darajaConfiguration.getRegisterUrlEndpoint())
                 .post(body)
-                .addHeader(AUTHORIZATION_HEADER_STRING,  String.format("%s %s", BEARER_AUTH_STRING, accessToken.getAccessToken()))
+                .addHeader(AUTHORIZATION_HEADER_STRING, String.format("%s %s", BEARER_AUTH_STRING, accessToken.getAccessToken()))
                 .build();
 
         try {
@@ -93,7 +96,7 @@ public class DarajaApiImpl implements DarajaApi {
         //get access token
         AccessToken accessToken = getAccessToken();
 
-        RequestBody body = RequestBody.Companion.create( Objects.requireNonNull(Helper.toJson(simulateC2BRequest)), JSON_MEDIA_TYPE);
+        RequestBody body = RequestBody.Companion.create(Objects.requireNonNull(Helper.toJson(simulateC2BRequest)), JSON_MEDIA_TYPE);
 
         //request body
         Request request = new Request.Builder()
@@ -104,7 +107,7 @@ public class DarajaApiImpl implements DarajaApi {
 
         try {
             Response response = okHttpClient.newCall(request).execute();
-            assert response.body()!= null;
+            assert response.body() != null;
             //use Jackson to Decode the ResponseBody
             return objectMapper.readValue(response.body().string(), SimulateC2BResponse.class);
         } catch (IOException e) {
@@ -114,14 +117,43 @@ public class DarajaApiImpl implements DarajaApi {
     }
 
     @Override
-    public B2CTransactionSyncResponse performB2CTransaction(InternalB2CTransactionRequest b2CTransactionRequest) {
-
+    public B2CTransactionSyncResponse performB2CTransaction(InternalB2CTransactionRequest internalB2CTransactionRequest) {
+        AccessToken accessToken = getAccessToken();
         B2CTransactionRequest b2CTransactionRequest1 = new B2CTransactionRequest();
-        b2CTransactionRequest1.setAmount(b2CTransactionRequest.getAmount());
-        b2CTransactionRequest1.setRemarks(b2CTransactionRequest.getRemarks());
-        b2CTransactionRequest1.setOccassion(b2CTransactionRequest.getOccassion());
-        b2CTransactionRequest1.setCommandID(b2CTransactionRequest.getCommandID());
-        b2CTransactionRequest1.setPartyB(b2CTransactionRequest.getPartyB());
-        return null;
+        b2CTransactionRequest1.setAmount(internalB2CTransactionRequest.getAmount());
+        b2CTransactionRequest1.setRemarks(internalB2CTransactionRequest.getRemarks());
+        b2CTransactionRequest1.setOccassion(internalB2CTransactionRequest.getOccassion());
+        b2CTransactionRequest1.setCommandID(internalB2CTransactionRequest.getCommandID());
+        b2CTransactionRequest1.setPartyB(internalB2CTransactionRequest.getPartyB());
+
+        //get security credentials
+        b2CTransactionRequest1.setSecurityCredential(Helper.getSecurityCredential(darajaConfiguration.getB2cInitiatorPassword()));
+
+        //log encrypted credentials
+        log.info(String.format("Security credentials: %s", b2CTransactionRequest1.getSecurityCredential()));
+
+        //set result url
+        b2CTransactionRequest1.setResultURL(darajaConfiguration.getB2cResultUrl());
+        b2CTransactionRequest1.setQueueTimeOutURL(darajaConfiguration.getB2cQueueTimeoutUrl());
+        b2CTransactionRequest1.setInitiatorName(darajaConfiguration.getB2cInitiatorName());
+        b2CTransactionRequest1.setPartyA(darajaConfiguration.getShortCode());
+
+        RequestBody body = RequestBody.create(Objects.requireNonNull(Helper.toJson(b2CTransactionRequest1)), JSON_MEDIA_TYPE);
+
+        Request request = new Request.Builder()
+                .url(darajaConfiguration.getB2cTransactionEndpoint())
+                .post(body)
+                .addHeader(AUTHORIZATION_HEADER_STRING, String.format("%s %s", BEARER_AUTH_STRING, accessToken.getAccessToken()))
+                .build();
+
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+
+            assert response.body() != null;
+            return objectMapper.readValue(response.body().string(), B2CTransactionSyncResponse.class);
+        } catch (IOException e) {
+            log.error(String.format("Could not perform B2C transaction ->%s", e.getLocalizedMessage()));
+            return null;
+        }
     }
 }
