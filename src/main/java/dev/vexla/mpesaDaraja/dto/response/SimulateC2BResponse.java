@@ -1,4 +1,4 @@
-package dev.vexla.mpesaDaraja.dto;
+package dev.vexla.mpesaDaraja.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
