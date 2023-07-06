@@ -22,7 +22,6 @@ public class Result {
 
     @JsonProperty("ResultType")
     private int resultType;
-
     @JsonProperty("ResultCode")
     private int resultCode;
 
