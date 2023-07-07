@@ -52,7 +52,7 @@ public class DarajaController {
     //B2C Transaction Region
 
     //expose callback url endpoint
-    @PostMapping(path = "/b2c-transaction-result", produces = "application/json")
+    @PostMapping(path = "/transaction-result", produces = "application/json")
     public ResponseEntity<AcknowledgeResponse> execute(@RequestBody B2CTransactionAsyncResponse response) throws JsonProcessingException {
         log.info("==================B2C Transaction Response =================");
         log.info(objectMapper.writeValueAsString(response));
