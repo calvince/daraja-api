@@ -202,6 +202,21 @@ public class DarajaApiImpl implements DarajaApi {
          AccessToken accessToken = getAccessToken();
             RequestBody body = RequestBody.create(Objects.requireNonNull(Helper.toJson(checkAccountBalanceRequest)), JSON_MEDIA_TYPE);
 
+        Request request = new Request.Builder()
+                .url(darajaConfiguration.getCheckAccountBalanceUrl())
+                .post(body)
+                .addHeader(AUTHORIZATION_HEADER_STRING, String.format("%s %s", BEARER_AUTH_STRING, accessToken.getAccessToken()))
+                .build();
+
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+
+            assert response.body() != null;
+            return objectMapper.readValue(response.body().string(), CommonTransactionSyncResponse.class);
+        } catch (IOException e) {
+            log.error(String.format("Could not fetch account balance ->%s", e.getLocalizedMessage()));
+            return null;
+        }
 
     }
 
