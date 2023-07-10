@@ -13,7 +13,8 @@ mpesa:
     confirmation-url: https://274e-196-111-83-125.ngrok-free.app/mobile-money/confirmation
     validation-url: https://274e-196-111-83-125.ngrok-free.app/mobile-money/validation
     b2c-transaction-endpoint: https://sandbox.safaricom.co.ke/mpesa/b2c/v1/paymentrequest
-    b2c-result-url: https://274e-196-111-83-125.ngrok-free.app/mobile-money/b2c-transaction-result
+    b2c-result-url: https://274e-196-111-83-125.ngrok-free.app/mobile-money/transaction-result
     b2c-queue-timeout-url: https://274e-196-111-83-125.ngrok-free.app/mobile-money/b2c-queue-timeout-url
     b2c-initiator-name: testapi
     b2c-initiator-password: Safaricom999!*!
+    transactionResultUrl: https://sandbox.safaricom.co.ke/mpesa/transactionstatus/v1/query
