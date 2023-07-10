@@ -18,3 +18,4 @@ mpesa:
     b2c-initiator-name: testapi
     b2c-initiator-password: Safaricom999!*!
     transactionResultUrl: https://sandbox.safaricom.co.ke/mpesa/transactionstatus/v1/query
+    checkAccountBalanceUrl: https://sandbox.safaricom.co.ke/mpesa/accountbalance/v1/query
