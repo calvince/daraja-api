@@ -66,12 +66,18 @@ public class DarajaController {
     }
 
     @PostMapping(path = "/b2c-transaction", produces = "application/json")
-    public ResponseEntity<B2CTransactionSyncResponse> performB2CTransaction(@RequestBody InternalB2CTransactionRequest b2CTransactionRequest) {
+    public ResponseEntity<CommonTransactionSyncResponse> performB2CTransaction(@RequestBody InternalB2CTransactionRequest b2CTransactionRequest) {
         return ResponseEntity.ok(this.darajaApi.performB2CTransaction(b2CTransactionRequest));
     }
 
     @PostMapping(path = "/b2c-transactionStatus",  produces = "application/json")
     public ResponseEntity<TransactionStatusSyncResponse> getTransactionStatus(@RequestBody InternalTransactionStatusRequest request) {
         return ResponseEntity.ok(this.darajaApi.getTransactionResult(request));
+    }
+
+    //endpoint to check account balance
+    @GetMapping(path = "/check-account-balance", produces = "application/json")
+    public ResponseEntity<CommonTransactionSyncResponse> checkAccountBalance() {
+        return ResponseEntity.ok(this.darajaApi.checkAccountBalance());
     }
 }
