@@ -4,14 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.vexla.mpesaDaraja.config.DarajaConfiguration;
-import dev.vexla.mpesaDaraja.dto.request.B2CTransactionRequest;
-import dev.vexla.mpesaDaraja.dto.request.InternalB2CTransactionRequest;
-import dev.vexla.mpesaDaraja.dto.request.SimulateC2BRequest;
-import dev.vexla.mpesaDaraja.dto.response.B2CTransactionSyncResponse;
-import dev.vexla.mpesaDaraja.dto.response.SimulateC2BResponse;
-import dev.vexla.mpesaDaraja.dto.request.RegisterUrlRequest;
-import dev.vexla.mpesaDaraja.dto.response.AccessToken;
-import dev.vexla.mpesaDaraja.dto.response.RegisterUrlResponse;
+import dev.vexla.mpesaDaraja.dto.request.*;
+import dev.vexla.mpesaDaraja.dto.response.*;
 import dev.vexla.mpesaDaraja.shared.Constants;
 import dev.vexla.mpesaDaraja.shared.Helper;
 import lombok.extern.slf4j.Slf4j;
@@ -156,4 +150,28 @@ public class DarajaApiImpl implements DarajaApi {
             return null;
         }
     }
+
+    @Override
+    public TransactionStatusSyncResponse getTransactionResult(InternalTransactionStatusRequest request) {
+
+        TransactionStatusRequest transactionStatusRequest = new TransactionStatusRequest();
+
+        transactionStatusRequest.setTransactionID(request.getTransactionID());
+        transactionStatusRequest.setInitiator(darajaConfiguration.getB2cInitiatorName());
+        transactionStatusRequest.setSecurityCredential(Helper.getSecurityCredential(darajaConfiguration.getB2cInitiatorPassword()));
+        transactionStatusRequest.setCommandID("TransactionStatusQuery");
+        transactionStatusRequest.setPartyA(darajaConfiguration.getShortCode());
+        transactionStatusRequest.setIdentifierType("4");
+        transactionStatusRequest.setResultURL(darajaConfiguration.getB2cResultUrl());
+        transactionStatusRequest.setQueueTimeOutURL(darajaConfiguration.getB2cQueueTimeoutUrl());
+        transactionStatusRequest.setRemarks("Completed");
+        transactionStatusRequest.setOccasion("Transaction Status");
+
+         AccessToken accessToken = getAccessToken();
+            RequestBody body = RequestBody.create(Objects.requireNonNull(Helper.toJson(transactionStatusRequest)), JSON_MEDIA_TYPE);
+
+
+    }
+
+
 }
