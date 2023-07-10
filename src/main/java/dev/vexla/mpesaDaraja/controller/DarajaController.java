@@ -3,6 +3,7 @@ package dev.vexla.mpesaDaraja.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.vexla.mpesaDaraja.dto.request.InternalB2CTransactionRequest;
+import dev.vexla.mpesaDaraja.dto.request.InternalTransactionStatusRequest;
 import dev.vexla.mpesaDaraja.dto.request.SimulateC2BRequest;
 import dev.vexla.mpesaDaraja.dto.response.*;
 import dev.vexla.mpesaDaraja.dto.request.TransactionResult;
@@ -67,5 +68,10 @@ public class DarajaController {
     @PostMapping(path = "/b2c-transaction", produces = "application/json")
     public ResponseEntity<B2CTransactionSyncResponse> performB2CTransaction(@RequestBody InternalB2CTransactionRequest b2CTransactionRequest) {
         return ResponseEntity.ok(this.darajaApi.performB2CTransaction(b2CTransactionRequest));
+    }
+
+    @PostMapping(path = "/b2c-transactionStatus",  produces = "application/json")
+    public ResponseEntity<TransactionStatusSyncResponse> getTransactionStatus(@RequestBody InternalTransactionStatusRequest request) {
+        return ResponseEntity.ok(this.darajaApi.getTransactionResult(request));
     }
 }
