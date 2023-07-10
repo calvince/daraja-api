@@ -152,11 +152,11 @@ public class DarajaApiImpl implements DarajaApi {
     }
 
     @Override
-    public TransactionStatusSyncResponse getTransactionResult(InternalTransactionStatusRequest request) {
+    public TransactionStatusSyncResponse getTransactionResult(InternalTransactionStatusRequest internalTransactionStatusRequest) {
 
         TransactionStatusRequest transactionStatusRequest = new TransactionStatusRequest();
 
-        transactionStatusRequest.setTransactionID(request.getTransactionID());
+        transactionStatusRequest.setTransactionID(internalTransactionStatusRequest.getTransactionID());
         transactionStatusRequest.setInitiator(darajaConfiguration.getB2cInitiatorName());
         transactionStatusRequest.setSecurityCredential(Helper.getSecurityCredential(darajaConfiguration.getB2cInitiatorPassword()));
         transactionStatusRequest.setCommandID("TransactionStatusQuery");
@@ -169,6 +169,22 @@ public class DarajaApiImpl implements DarajaApi {
 
          AccessToken accessToken = getAccessToken();
             RequestBody body = RequestBody.create(Objects.requireNonNull(Helper.toJson(transactionStatusRequest)), JSON_MEDIA_TYPE);
+
+             Request request = new Request.Builder()
+                .url(darajaConfiguration.getTransactionResultUrl())
+                .post(body)
+                .addHeader(AUTHORIZATION_HEADER_STRING, String.format("%s %s", BEARER_AUTH_STRING, accessToken.getAccessToken()))
+                .build();
+
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+
+            assert response.body() != null;
+            return objectMapper.readValue(response.body().string(), TransactionStatusSyncResponse.class);
+        } catch (IOException e) {
+            log.error(String.format("Could not fetch transaction result ->%s", e.getLocalizedMessage()));
+            return null;
+        }
 
 
     }
