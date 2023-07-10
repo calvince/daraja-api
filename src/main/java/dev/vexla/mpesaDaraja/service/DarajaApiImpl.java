@@ -1,15 +1,13 @@
 package dev.vexla.mpesaDaraja.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.vexla.mpesaDaraja.config.DarajaConfiguration;
 import dev.vexla.mpesaDaraja.dto.request.*;
 import dev.vexla.mpesaDaraja.dto.response.*;
-import dev.vexla.mpesaDaraja.shared.Constants;
 import dev.vexla.mpesaDaraja.shared.Helper;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import okhttp3.Response;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -111,7 +109,7 @@ public class DarajaApiImpl implements DarajaApi {
     }
 
     @Override
-    public B2CTransactionSyncResponse performB2CTransaction(InternalB2CTransactionRequest internalB2CTransactionRequest) {
+    public CommonTransactionSyncResponse performB2CTransaction(InternalB2CTransactionRequest internalB2CTransactionRequest) {
         AccessToken accessToken = getAccessToken();
         B2CTransactionRequest b2CTransactionRequest1 = new B2CTransactionRequest();
         b2CTransactionRequest1.setAmount(internalB2CTransactionRequest.getAmount());
@@ -144,7 +142,7 @@ public class DarajaApiImpl implements DarajaApi {
             Response response = okHttpClient.newCall(request).execute();
 
             assert response.body() != null;
-            return objectMapper.readValue(response.body().string(), B2CTransactionSyncResponse.class);
+            return objectMapper.readValue(response.body().string(), CommonTransactionSyncResponse.class);
         } catch (IOException e) {
             log.error(String.format("Could not perform B2C transaction ->%s", e.getLocalizedMessage()));
             return null;
@@ -159,13 +157,13 @@ public class DarajaApiImpl implements DarajaApi {
         transactionStatusRequest.setTransactionID(internalTransactionStatusRequest.getTransactionID());
         transactionStatusRequest.setInitiator(darajaConfiguration.getB2cInitiatorName());
         transactionStatusRequest.setSecurityCredential(Helper.getSecurityCredential(darajaConfiguration.getB2cInitiatorPassword()));
-        transactionStatusRequest.setCommandID("TransactionStatusQuery");
+        transactionStatusRequest.setCommandID(TRANSACTION_STATUS_QUERY_COMMAND);
         transactionStatusRequest.setPartyA(darajaConfiguration.getShortCode());
         transactionStatusRequest.setIdentifierType("4");
         transactionStatusRequest.setResultURL(darajaConfiguration.getB2cResultUrl());
         transactionStatusRequest.setQueueTimeOutURL(darajaConfiguration.getB2cQueueTimeoutUrl());
-        transactionStatusRequest.setRemarks("Completed");
-        transactionStatusRequest.setOccasion("Transaction Status");
+        transactionStatusRequest.setRemarks(TRANSACTION_STATUS_VALUE);
+        transactionStatusRequest.setOccasion(TRANSACTION_STATUS_VALUE);
 
          AccessToken accessToken = getAccessToken();
             RequestBody body = RequestBody.create(Objects.requireNonNull(Helper.toJson(transactionStatusRequest)), JSON_MEDIA_TYPE);
@@ -185,6 +183,24 @@ public class DarajaApiImpl implements DarajaApi {
             log.error(String.format("Could not fetch transaction result ->%s", e.getLocalizedMessage()));
             return null;
         }
+
+
+    }
+
+    @Override
+    public CommonTransactionSyncResponse checkAccountBalance() {
+        CheckAccountBalanceRequest checkAccountBalanceRequest = new CheckAccountBalanceRequest();
+        checkAccountBalanceRequest.setInitiator(darajaConfiguration.getB2cInitiatorName());
+        checkAccountBalanceRequest.setQueueTimeOutURL(darajaConfiguration.getB2cQueueTimeoutUrl());
+        checkAccountBalanceRequest.setRemarks(TRANSACTION_STATUS_VALUE);
+        checkAccountBalanceRequest.setSecurityCredential(Helper.getSecurityCredential(darajaConfiguration.getB2cInitiatorPassword()));
+        checkAccountBalanceRequest.setCommandID(ACCOUNT_BALANCE_COMMAND);
+        checkAccountBalanceRequest.setPartyA(darajaConfiguration.getShortCode());
+        checkAccountBalanceRequest.setIdentifierType(SHORT_CODE_IDENTIFIER);
+        checkAccountBalanceRequest.setResultURL(darajaConfiguration.getB2cResultUrl());
+
+         AccessToken accessToken = getAccessToken();
+            RequestBody body = RequestBody.create(Objects.requireNonNull(Helper.toJson(checkAccountBalanceRequest)), JSON_MEDIA_TYPE);
 
 
     }
