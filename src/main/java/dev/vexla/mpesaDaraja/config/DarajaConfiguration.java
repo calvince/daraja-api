@@ -25,6 +25,7 @@ public class DarajaConfiguration {
     private String b2cQueueTimeoutUrl;
     private String b2cInitiatorName;
     private String b2cInitiatorPassword;
+    private String transactionResultUrl;
 
     @Override
     public String toString() {
