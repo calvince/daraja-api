@@ -1,36 +1,33 @@
 package dev.vexla.mpesaDaraja.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dev.vexla.mpesaDaraja.dto.ReferenceData;
 import dev.vexla.mpesaDaraja.dto.ResultParameters;
 import lombok.Data;
 
 @Data
-public class Result {
+public class Result{
 
-    @JsonProperty("ConversationID")
-    private String conversationID;
+	@JsonProperty("ConversationID")
+	private String conversationID;
 
-    @JsonProperty("ReferenceData")
-    private ReferenceData referenceData;
+	@JsonProperty("ReferenceData")
+	private ReferenceData referenceData;
 
-    @JsonProperty("OriginatorConversationID")
-    private String originatorConversationID;
+	@JsonProperty("OriginatorConversationID")
+	private String originatorConversationID;
 
-    @JsonProperty("ResultDesc")
-    private String resultDesc;
+	@JsonProperty("ResultDesc")
+	private String resultDesc;
 
-    @JsonProperty("ResultType")
-    private int resultType;
-    @JsonProperty("ResultCode")
-    private int resultCode;
+	@JsonProperty("ResultType")
+	private int resultType;
+	@JsonProperty("ResultCode")
+	private int resultCode;
 
-    @JsonProperty("ResultParameters")
-    private ResultParameters resultParameters;
+	@JsonProperty("ResultParameters")
+	private ResultParameters resultParameters;
 
-    @JsonProperty("TransactionID")
-    private String transactionID;
-
-
+	@JsonProperty("TransactionID")
+	private String transactionID;
 
 }
