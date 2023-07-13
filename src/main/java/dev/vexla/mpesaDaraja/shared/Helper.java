@@ -23,7 +23,9 @@ import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Date;
 import java.util.random.RandomGenerator;
 
 
@@ -89,4 +91,8 @@ public class Helper {
         String concatenatedString = String.format("%s%s%s", shortCode, passKey,timeStamp);
         return toBase64(concatenatedString);
     }
+
+    public static  String getTransactionTimeStamp() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        return dateFormat.format(new Date());    }
 }
