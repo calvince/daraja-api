@@ -84,4 +84,9 @@ public class Helper {
                 .build();
         return randomStringGenerator.generate(12).toUpperCase();
     }
+
+    public static String generateStkPassword(String shortCode, String passKey, String timeStamp) {
+        String concatenatedString = String.format("%s%s%s", shortCode, passKey,timeStamp);
+        return toBase64(concatenatedString);
+    }
 }
