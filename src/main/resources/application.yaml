@@ -21,5 +21,5 @@ mpesa:
     checkAccountBalanceUrl: https://sandbox.safaricom.co.ke/mpesa/accountbalance/v1/query
     mpesaStkPasskey: MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMTYwMjE2MTY1NjI3
     mpesaStkPushShortCode: 174379
-    mpesaStkPushRequestCallback:  https://274e-196-111-83-125.ngrok-free.app/stk-transaction-result
+    mpesaStkPushRequestCallbackUrl:  https://274e-196-111-83-125.ngrok-free.app/stk-transaction-result
     mpesaExpressStkUrl: https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest

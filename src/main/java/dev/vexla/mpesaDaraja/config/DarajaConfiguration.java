@@ -28,7 +28,7 @@ public class DarajaConfiguration {
     private String transactionResultUrl;
     private String checkAccountBalanceUrl;
     private String mpesaExpressStkUrl;
-    private String mpesaStkPushRequestCallback;
+    private String mpesaStkPushRequestCallbackUrl;
     private String mpesaStkPushShortCode;
     private String mpesaStkPasskey;
 
