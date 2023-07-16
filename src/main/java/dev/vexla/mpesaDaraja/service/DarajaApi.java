@@ -1,6 +1,7 @@
 package dev.vexla.mpesaDaraja.service;
 
 import dev.vexla.mpesaDaraja.dto.request.InternalB2CTransactionRequest;
+import dev.vexla.mpesaDaraja.dto.request.InternalStkPushRequest;
 import dev.vexla.mpesaDaraja.dto.request.InternalTransactionStatusRequest;
 import dev.vexla.mpesaDaraja.dto.request.SimulateC2BRequest;
 import dev.vexla.mpesaDaraja.dto.response.*;
@@ -16,4 +17,6 @@ public interface DarajaApi {
     TransactionStatusSyncResponse getTransactionResult(InternalTransactionStatusRequest request);
 
     CommonTransactionSyncResponse checkAccountBalance();
+
+    StkPushSyncResponse performStkPushTransaction(InternalStkPushRequest internalStkPushRequest);
 }
