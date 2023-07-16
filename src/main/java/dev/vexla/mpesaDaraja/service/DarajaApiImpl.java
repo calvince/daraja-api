@@ -241,9 +241,23 @@ public class DarajaApiImpl implements DarajaApi {
         stkPushRequest.setAccountReference(getTransactionUniqueNumber());
         stkPushRequest.setTransactionDesc(String.format("%s Transaction", internalStkPushRequest.getPhoneNumber()));
 
+        AccessToken accessToken = getAccessToken();
+        RequestBody requestBody = RequestBody.create(Objects.requireNonNull(toJson(stkPushRequest)), JSON_MEDIA_TYPE);
 
+        Request request = new Request.Builder()
+                .url(darajaConfiguration.getMpesaExpressStkUrl())
+                .post(requestBody)
+                .addHeader(AUTHORIZATION_HEADER_STRING, String.format("%s %s",BEARER_AUTH_STRING, accessToken))
+                .build();
 
-        return null;
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+            assert response.body() != null;
+            return objectMapper.readValue(response.body().string(), StkPushSyncResponse.class);
+        } catch (IOException e) {
+             log.error(String.format("Could not fetch account balance ->%s", e.getLocalizedMessage()));
+            return null;
+        }
     }
 
 
