@@ -2,12 +2,10 @@ package dev.vexla.mpesaDaraja.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.vexla.mpesaDaraja.dto.request.InternalB2CTransactionRequest;
-import dev.vexla.mpesaDaraja.dto.request.InternalTransactionStatusRequest;
-import dev.vexla.mpesaDaraja.dto.request.SimulateC2BRequest;
+import dev.vexla.mpesaDaraja.dto.request.*;
 import dev.vexla.mpesaDaraja.dto.response.*;
-import dev.vexla.mpesaDaraja.dto.request.TransactionResult;
 import dev.vexla.mpesaDaraja.service.DarajaApi;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -79,5 +77,15 @@ public class DarajaController {
     @GetMapping(path = "/check-account-balance", produces = "application/json")
     public ResponseEntity<CommonTransactionSyncResponse> checkAccountBalance() {
         return ResponseEntity.ok(this.darajaApi.checkAccountBalance());
+    }
+
+    //expose callback url endpoint
+    @SneakyThrows
+    @PostMapping(path = "/stk-transaction-result", produces = "application/json")
+    public ResponseEntity<AcknowledgeResponse> performStkPushTransaction(@RequestBody StkPushAsyncResponse stkPushAsyncResponse) {
+        log.info("============STK Push Async Response============");
+        log.info(objectMapper.writeValueAsString(stkPushAsyncResponse));
+        return ResponseEntity.ok(acknowledgeResponse);
+
     }
 }
