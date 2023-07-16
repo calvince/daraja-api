@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.vexla.mpesaDaraja.config.DarajaConfiguration;
 import dev.vexla.mpesaDaraja.dto.request.*;
 import dev.vexla.mpesaDaraja.dto.response.*;
+import dev.vexla.mpesaDaraja.shared.Constants;
 import dev.vexla.mpesaDaraja.shared.Helper;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 import static dev.vexla.mpesaDaraja.shared.Constants.*;
+import static dev.vexla.mpesaDaraja.shared.Helper.*;
 
 @Service
 @Slf4j
@@ -32,7 +34,7 @@ public class DarajaApiImpl implements DarajaApi {
     public AccessToken getAccessToken() {
         log.info("*** Returns Daraja Api access token response; get token *");
         // get the Base64 of consumerKey + ":" + consumerSecret
-        String encodedCredentials = Helper.toBase64(String.format("%s:%s",
+        String encodedCredentials = toBase64(String.format("%s:%s",
                 darajaConfiguration.getConsumerKey(), darajaConfiguration.getConsumerSecret()));
         Request request = new Request.Builder()
                 .url(String.format("%s?grant_type=%s", darajaConfiguration.getOauthEndpoint(), darajaConfiguration.getGrantType()))
@@ -63,7 +65,7 @@ public class DarajaApiImpl implements DarajaApi {
         registerUrlRequest.setValidationURL(darajaConfiguration.getValidationUrl());
         registerUrlRequest.setResponseType(darajaConfiguration.getResponseType());
 
-        RequestBody body = RequestBody.Companion.create(Objects.requireNonNull(Helper.toJson(registerUrlRequest)), JSON_MEDIA_TYPE);
+        RequestBody body = RequestBody.Companion.create(Objects.requireNonNull(toJson(registerUrlRequest)), JSON_MEDIA_TYPE);
 
         Request request = new Request.Builder()
                 .url(darajaConfiguration.getRegisterUrlEndpoint())
@@ -88,7 +90,7 @@ public class DarajaApiImpl implements DarajaApi {
         //get access token
         AccessToken accessToken = getAccessToken();
 
-        RequestBody body = RequestBody.Companion.create(Objects.requireNonNull(Helper.toJson(simulateC2BRequest)), JSON_MEDIA_TYPE);
+        RequestBody body = RequestBody.Companion.create(Objects.requireNonNull(toJson(simulateC2BRequest)), JSON_MEDIA_TYPE);
 
         //request body
         Request request = new Request.Builder()
@@ -119,7 +121,7 @@ public class DarajaApiImpl implements DarajaApi {
         b2CTransactionRequest1.setPartyB(internalB2CTransactionRequest.getPartyB());
 
         //get security credentials
-        b2CTransactionRequest1.setSecurityCredential(Helper.getSecurityCredential(darajaConfiguration.getB2cInitiatorPassword()));
+        b2CTransactionRequest1.setSecurityCredential(getSecurityCredential(darajaConfiguration.getB2cInitiatorPassword()));
 
         //log encrypted credentials
         log.info(String.format("Security credentials: %s", b2CTransactionRequest1.getSecurityCredential()));
@@ -130,7 +132,7 @@ public class DarajaApiImpl implements DarajaApi {
         b2CTransactionRequest1.setInitiatorName(darajaConfiguration.getB2cInitiatorName());
         b2CTransactionRequest1.setPartyA(darajaConfiguration.getShortCode());
 
-        RequestBody body = RequestBody.create(Objects.requireNonNull(Helper.toJson(b2CTransactionRequest1)), JSON_MEDIA_TYPE);
+        RequestBody body = RequestBody.create(Objects.requireNonNull(toJson(b2CTransactionRequest1)), JSON_MEDIA_TYPE);
 
         Request request = new Request.Builder()
                 .url(darajaConfiguration.getB2cTransactionEndpoint())
@@ -156,7 +158,7 @@ public class DarajaApiImpl implements DarajaApi {
 
         transactionStatusRequest.setTransactionID(internalTransactionStatusRequest.getTransactionID());
         transactionStatusRequest.setInitiator(darajaConfiguration.getB2cInitiatorName());
-        transactionStatusRequest.setSecurityCredential(Helper.getSecurityCredential(darajaConfiguration.getB2cInitiatorPassword()));
+        transactionStatusRequest.setSecurityCredential(getSecurityCredential(darajaConfiguration.getB2cInitiatorPassword()));
         transactionStatusRequest.setCommandID(TRANSACTION_STATUS_QUERY_COMMAND);
         transactionStatusRequest.setPartyA(darajaConfiguration.getShortCode());
         transactionStatusRequest.setIdentifierType("4");
@@ -166,7 +168,7 @@ public class DarajaApiImpl implements DarajaApi {
         transactionStatusRequest.setOccasion(TRANSACTION_STATUS_VALUE);
 
          AccessToken accessToken = getAccessToken();
-            RequestBody body = RequestBody.create(Objects.requireNonNull(Helper.toJson(transactionStatusRequest)), JSON_MEDIA_TYPE);
+            RequestBody body = RequestBody.create(Objects.requireNonNull(toJson(transactionStatusRequest)), JSON_MEDIA_TYPE);
 
              Request request = new Request.Builder()
                 .url(darajaConfiguration.getTransactionResultUrl())
@@ -193,14 +195,14 @@ public class DarajaApiImpl implements DarajaApi {
         checkAccountBalanceRequest.setInitiator(darajaConfiguration.getB2cInitiatorName());
         checkAccountBalanceRequest.setQueueTimeOutURL(darajaConfiguration.getB2cQueueTimeoutUrl());
         checkAccountBalanceRequest.setRemarks(TRANSACTION_STATUS_VALUE);
-        checkAccountBalanceRequest.setSecurityCredential(Helper.getSecurityCredential(darajaConfiguration.getB2cInitiatorPassword()));
+        checkAccountBalanceRequest.setSecurityCredential(getSecurityCredential(darajaConfiguration.getB2cInitiatorPassword()));
         checkAccountBalanceRequest.setCommandID(ACCOUNT_BALANCE_COMMAND);
         checkAccountBalanceRequest.setPartyA(darajaConfiguration.getShortCode());
         checkAccountBalanceRequest.setIdentifierType(SHORT_CODE_IDENTIFIER);
         checkAccountBalanceRequest.setResultURL(darajaConfiguration.getB2cResultUrl());
 
          AccessToken accessToken = getAccessToken();
-            RequestBody body = RequestBody.create(Objects.requireNonNull(Helper.toJson(checkAccountBalanceRequest)), JSON_MEDIA_TYPE);
+            RequestBody body = RequestBody.create(Objects.requireNonNull(toJson(checkAccountBalanceRequest)), JSON_MEDIA_TYPE);
 
         Request request = new Request.Builder()
                 .url(darajaConfiguration.getCheckAccountBalanceUrl())
@@ -218,6 +220,30 @@ public class DarajaApiImpl implements DarajaApi {
             return null;
         }
 
+    }
+
+    @Override
+    public StkPushSyncResponse performStkPushTransaction(InternalStkPushRequest internalStkPushRequest) {
+
+        StkPushRequest stkPushRequest = new StkPushRequest();
+        stkPushRequest.setBusinessShortCode(darajaConfiguration.getMpesaStkPushShortCode());
+        String transactionTImeStamp = getTransactionTimeStamp();
+        String stkPushPassword = generateStkPushPassword(darajaConfiguration.getMpesaStkPushShortCode(),
+                darajaConfiguration.getMpesaStkPasskey(), transactionTImeStamp);
+        stkPushRequest.setPassword(stkPushPassword);
+        stkPushRequest.setTimestamp(transactionTImeStamp);
+        stkPushRequest.setTransactionType(CUSTOMER_PAYBILL_ONLINE);
+        stkPushRequest.setAmount(internalStkPushRequest.getAmount());
+        stkPushRequest.setPartyA(internalStkPushRequest.getPhoneNumber());
+        stkPushRequest.setPartyB(darajaConfiguration.getMpesaStkPushShortCode());
+        stkPushRequest.setPhoneNumber(internalStkPushRequest.getPhoneNumber());
+        stkPushRequest.setCallBackURL(darajaConfiguration.getMpesaStkPushRequestCallbackUrl());
+        stkPushRequest.setAccountReference(getTransactionUniqueNumber());
+        stkPushRequest.setTransactionDesc(String.format("%s Transaction", internalStkPushRequest.getPhoneNumber()));
+
+
+
+        return null;
     }
 
 
