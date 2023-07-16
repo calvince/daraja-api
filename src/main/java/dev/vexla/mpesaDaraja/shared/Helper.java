@@ -87,12 +87,13 @@ public class Helper {
         return randomStringGenerator.generate(12).toUpperCase();
     }
 
-    public static String generateStkPassword(String shortCode, String passKey, String timeStamp) {
-        String concatenatedString = String.format("%s%s%s", shortCode, passKey,timeStamp);
+    public static String generateStkPushPassword(String shortCode, String passKey, String timeStamp) {
+        String concatenatedString = String.format("%s%s%s", shortCode, passKey, timeStamp);
         return toBase64(concatenatedString);
     }
 
-    public static  String getTransactionTimeStamp() {
+    public static String getTransactionTimeStamp() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        return dateFormat.format(new Date());    }
+        return dateFormat.format(new Date());
+    }
 }
