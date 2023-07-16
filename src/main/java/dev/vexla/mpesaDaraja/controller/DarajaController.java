@@ -45,7 +45,7 @@ public class DarajaController {
     //simulate c2b transaction
     @PostMapping(path = "/simulate-c2b", produces = "application/json")
     public ResponseEntity<SimulateC2BResponse> simulateC2BTransaction(@RequestBody SimulateC2BRequest simulateC2BRequest) {
-        return  ResponseEntity.ok(this.darajaApi.simulateC2BTransaction(simulateC2BRequest));
+        return ResponseEntity.ok(this.darajaApi.simulateC2BTransaction(simulateC2BRequest));
     }
 
     //B2C Transaction Region
@@ -59,7 +59,7 @@ public class DarajaController {
     }
 
     @PostMapping(path = "/b2c-queue-timeout", produces = "application/json")
-    public ResponseEntity<AcknowledgeResponse> queueTimeout(@RequestBody Object object)  {
+    public ResponseEntity<AcknowledgeResponse> queueTimeout(@RequestBody Object object) {
         return ResponseEntity.ok(acknowledgeResponse);
     }
 
@@ -68,7 +68,7 @@ public class DarajaController {
         return ResponseEntity.ok(this.darajaApi.performB2CTransaction(b2CTransactionRequest));
     }
 
-    @PostMapping(path = "/b2c-transactionStatus",  produces = "application/json")
+    @PostMapping(path = "/b2c-transactionStatus", produces = "application/json")
     public ResponseEntity<TransactionStatusSyncResponse> getTransactionStatus(@RequestBody InternalTransactionStatusRequest request) {
         return ResponseEntity.ok(this.darajaApi.getTransactionResult(request));
     }
@@ -86,6 +86,5 @@ public class DarajaController {
         log.info("============STK Push Async Response============");
         log.info(objectMapper.writeValueAsString(stkPushAsyncResponse));
         return ResponseEntity.ok(acknowledgeResponse);
-
     }
 }
