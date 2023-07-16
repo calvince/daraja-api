@@ -84,7 +84,9 @@ public class Helper {
                 .withinRange('0', 'z')
                 .filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS)
                 .build();
-        return randomStringGenerator.generate(12).toUpperCase();
+        String transactionNumber = randomStringGenerator.generate(12).toUpperCase();
+        log.info(String.format("Transaction Number: %s", transactionNumber));
+        return transactionNumber;
     }
 
     public static String generateStkPushPassword(String shortCode, String passKey, String timeStamp) {
