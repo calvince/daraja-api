@@ -27,6 +27,10 @@ public class DarajaConfiguration {
     private String b2cInitiatorPassword;
     private String transactionResultUrl;
     private String checkAccountBalanceUrl;
+    private String mpesaExpressStkUrl;
+    private String mpesaStkPushRequestCallback;
+    private String mpesaStkPushShortCode;
+    private String mpesaStkPasskey;
 
     @Override
     public String toString() {
