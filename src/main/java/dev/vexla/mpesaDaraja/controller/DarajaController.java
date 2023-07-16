@@ -87,4 +87,10 @@ public class DarajaController {
         log.info(objectMapper.writeValueAsString(stkPushAsyncResponse));
         return ResponseEntity.ok(acknowledgeResponse);
     }
+
+    @PostMapping(path = "/stk-transaction-request")
+    public ResponseEntity<StkPushSyncResponse> performStkPushTransaction(@RequestBody InternalStkPushRequest internalStkPushRequest) {
+        log.info("============STK Push  Response============");
+        return ResponseEntity.ok(this.darajaApi.performStkPushTransaction(internalStkPushRequest));
+    }
 }
