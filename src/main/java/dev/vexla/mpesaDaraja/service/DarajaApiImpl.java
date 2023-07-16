@@ -255,7 +255,7 @@ public class DarajaApiImpl implements DarajaApi {
             assert response.body() != null;
             return objectMapper.readValue(response.body().string(), StkPushSyncResponse.class);
         } catch (IOException e) {
-             log.error(String.format("Could not fetch account balance ->%s", e.getLocalizedMessage()));
+             log.error(String.format("Could not perform Stk Push Transaction ->%s", e.getLocalizedMessage()));
             return null;
         }
     }
