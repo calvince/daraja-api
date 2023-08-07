@@ -30,7 +30,8 @@ spring:
     url: jdbc:mysql://${DB_HOST:localhost}:3306/mpesaApi
     username: ${env.DB_USERNAME}
     password: ${env.DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driverClassName: com.mysql.cj.jdbc.Driver
+
   #JPA/Hibernate
   jpa:
     hibernate:
