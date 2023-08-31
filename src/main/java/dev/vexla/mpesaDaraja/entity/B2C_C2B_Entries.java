@@ -3,6 +3,9 @@ package dev.vexla.mpesaDaraja.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import java.util.Date;
 
 
@@ -43,7 +46,8 @@ public class B2C_C2B_Entries {
     @Column(name = "bill_ref_number")
     private String billRefNumber;
 
-    @Column(name = "raw_callback_payload_response", length = 500)
-    private String rawCallbackPayloadResponse;
+    @Column(name = "raw_callback_payload_response")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private Object rawCallbackPayloadResponse;
 
 }
