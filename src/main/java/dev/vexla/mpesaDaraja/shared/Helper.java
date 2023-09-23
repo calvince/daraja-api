@@ -8,7 +8,6 @@ import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -16,7 +15,6 @@ import javax.crypto.NoSuchPaddingException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.CertificateException;
@@ -52,7 +50,7 @@ public class Helper {
             Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
             byte[] input = b2cInitiatorPassword.getBytes();
             Resource resource = new ClassPathResource("cert.cer");
-            InputStream inputStream = resource.getInputStream();
+            //InputStream inputStream = resource.getInputStream();
 
             FileInputStream fileInputStream = new FileInputStream(resource.getFile());
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCPadding", "BC");
@@ -72,7 +70,7 @@ public class Helper {
             log.error(String.format("Error generating security credentials ->%s", e.getLocalizedMessage()));
             throw e;
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info(String.format("IOException ->%s", e));
             throw e;
         }
     }
